@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Board from './Board';
 import logo from '../logo.svg';
 import '../style/App.css';
 
@@ -9,6 +10,9 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
         </header>
+        <div className="mainContainer">
+          <Board />
+        </div>
       </div>
     );
   }

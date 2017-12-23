@@ -25,3 +25,33 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+.mainContainer {
+  margin: 20px;
+}
+
+.board { 
+}
+
+table {
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+tr {
+  padding: 0;
+  margin: 0;
+}
+td {
+  padding: 0;
+  margin: 0;
+  height: 30px;
+  width: 30px;
+  text-align: center;
+  background-color: hsl(0, 0%, 63%);
+  border: solid 1px hsl(0, 0%, 20%);
+}
+
+td.clear {
+  background-color: hsl(0, 0%, 90%);
+}
