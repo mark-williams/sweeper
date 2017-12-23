@@ -21,6 +21,7 @@
     // React-specific
      "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
      "react/forbid-prop-types": [1, { "forbid": ["any"] }],
-     "react/no-did-mount-set-state": [0]
+     "react/no-did-mount-set-state": [0],
+     "react/no-multi-comp": 0
   }
 }
