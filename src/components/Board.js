@@ -1,12 +1,13 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const data = [
-  [0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0],
-  [0, 0, 1, 1, 0],
-  [0, 0, 0, 1, 0],
-  [0, 0, 0, 0, 0]
-];
+// const data = [
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 0, 0, 0],
+//   [0, 0, 1, 1, 0],
+//   [0, 0, 0, 1, 0],
+//   [0, 0, 0, 0, 0]
+// ];
 
 const renderItems = item => {
   const className = item ? 'clear' : '';
@@ -27,7 +28,7 @@ const renderRow = row => {
   );
 };
 
-const Board = () => {
+const Board = ({ data }) => {
   return (
     <div className="board">
       <table>
@@ -37,4 +38,10 @@ const Board = () => {
   );
 };
 
-export default Board;
+const mapStateToProps = state => {
+  return {
+    data: state
+  };
+};
+
+export default connect(mapStateToProps)(Board);
