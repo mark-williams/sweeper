@@ -1,6 +1,6 @@
 export const PROBE = 'PROBE';
 
-export const probleCell = (cellId) => ({
+export const probeCell = (cellId) => ({
   type: PROBE,
   payload: cellId
 });
