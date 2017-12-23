@@ -1,26 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { probeCell } from '../actions';
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   renderItems = item => {
-    const className = item ? 'clear' : '';
+    const className = item.cleared ? 'clear' : '';
     return (
-      <td className={className}>
-        <div onClick={() => this.props.onCellClick(item)}>
-          {item}
+      <td key={item.key} className={className}>
+        <div onClick={() => this.props.onCellClick(item.key)}>
+          &nbsp;
         </div>
       </td>
     );
   }
 
-  renderRow = row => {
+  renderRow = (row, idx) => {
     return (
-      <tr>
+      <tr key={idx}>
         {row.map(this.renderItems)}
       </tr>
     );
@@ -30,16 +27,23 @@ class Board extends React.Component {
     return (
       <div className="board">
         <table>
-          {this.props.data.map(this.renderRow)}
+          <tbody>
+            {this.props.cells.map(this.renderRow)}
+          </tbody>
         </table>
       </div>
     );
   }
 }
 
+Board.propTypes = {
+  cells: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
+  onCellClick: PropTypes.func
+};
+
 const mapStateToProps = state => {
   return {
-    data: state
+    cells: state.cells
   };
 };
 
