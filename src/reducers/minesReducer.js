@@ -49,3 +49,4 @@ const minesReducer = (state = getInitialState(), action) => {
 };
 
 export default minesReducer;
+export { clearCells };
