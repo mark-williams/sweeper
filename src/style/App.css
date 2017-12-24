@@ -50,6 +50,7 @@ td {
   text-align: center;
   background-color: hsl(0, 0%, 63%);
   border: solid 1px hsl(0, 0%, 20%);
+  cursor: pointer;
 }
 
 td.clear {

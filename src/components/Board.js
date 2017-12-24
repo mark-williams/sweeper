@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { probeCell } from '../actions';
 
+
 class Board extends React.Component {
   renderItems = item => {
     const className = item.cleared ? 'clear' : '';
     return (
       <td key={item.key} className={className}>
         <div onClick={() => this.props.onCellClick(item.key)}>
-          &nbsp;
+          {item.mined ? 'x' : <span>&nbsp;</span> }
         </div>
       </td>
     );

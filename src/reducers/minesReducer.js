@@ -5,6 +5,10 @@ const HEIGHT = 10;
 
 const getKey = (row, col) => (`${row}:${col}`);
 
+const hasMine = () => {
+  return (Math.random() * 10) < 1;
+};
+
 const getInitialState = () => {
   const cells = [];
   for (let rowIndex = 0; rowIndex < HEIGHT; rowIndex++) {
@@ -12,7 +16,8 @@ const getInitialState = () => {
     for (let colIndex = 0; colIndex < WIDTH; colIndex++) {
       const item = {
         key: getKey(rowIndex, colIndex),
-        cleared: false
+        cleared: false,
+        mined: hasMine()
       };
       row.push(item);
     }
