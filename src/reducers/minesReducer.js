@@ -4,6 +4,10 @@ const WIDTH = 10;
 const HEIGHT = 10;
 
 const getKey = (row, col) => (`${row}:${col}`);
+const getIndexesFromKey = (key) => {
+  const indexes = key.split(':');
+  return { row: parseInt(indexes[0], 10), col: parseInt(indexes[1], 10) };
+};
 
 const hasMine = () => {
   return (Math.random() * 10) < 1;
@@ -27,11 +31,24 @@ const getInitialState = () => {
   return { cells };
 };
 
+const isCellOrNeighbour = (key, rowIndex, colIndex) => {
+  const selected = getIndexesFromKey(key);
+  if (rowIndex >= selected.row - 1 && rowIndex <= selected.row + 1) {
+    if (colIndex >= selected.col - 1 && colIndex <= selected.col + 1) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 const clearCells = (cells, key) => {
-  return cells.map(r => {
-    return r.map(item => {
-      if (!item.cleared && item.key === key) {
-        return { ...item, cleared: true };
+  return cells.map((row, rowIndex) => {
+    return row.map((item, colIndex) => {
+      if (!item.cleared && !item.mined) {
+        if (isCellOrNeighbour(key, rowIndex, colIndex)) {
+          return { ...item, cleared: true };
+        }
       }
       return item;
     });
