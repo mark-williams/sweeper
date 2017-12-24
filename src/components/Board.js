@@ -10,6 +10,7 @@ class Board extends React.Component {
     return (
       <td key={item.key} className={className}>
         <div onClick={() => this.props.onCellClick(item.key)}>
+          {item.adjacentMineCount ? item.adjacentMineCount :  <span>&nbsp;</span> }
           {item.mined ? 'x' : <span>&nbsp;</span> }
         </div>
       </td>

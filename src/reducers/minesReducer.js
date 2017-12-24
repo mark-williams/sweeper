@@ -21,6 +21,7 @@ const getInitialState = () => {
       const item = {
         key: getKey(rowIndex, colIndex),
         cleared: false,
+        adjacentMineCount: 0,
         mined: hasMine()
       };
       row.push(item);
@@ -55,10 +56,79 @@ const clearCells = (cells, key) => {
   });
 };
 
+const isOutOfBounds = (row, col) => {
+  return row < 0 || row >= HEIGHT || col < 0 || col >= WIDTH;
+};
+
+const getAdjacentCells = (cells, row, col) => {
+  const adjacents = [];
+  for (let rowIndex = row - 1; rowIndex <= row + 1; rowIndex++) {
+    if (cells[rowIndex]) {
+      for (let colIndex = col - 1; colIndex <= col + 1; colIndex++) {
+        if (rowIndex !== row || colIndex !== col) {
+          if (cells[rowIndex][colIndex]) {
+            adjacents.push(cells[rowIndex][colIndex]);
+          }
+        }
+      }
+    }
+  }
+
+  return adjacents;
+};
+
+const getAdjacentCellsMineCount = (cells, row, col) => {
+  const adjacents = getAdjacentCells(cells, row, col);
+
+  return adjacents.reduce((tot, c) => {
+    if (c.mined) {
+      return tot + 1;
+    }
+
+    return tot;
+  },
+  0);
+};
+
+const clearCell = (cells, key) => {
+  const cell = getIndexesFromKey(key);
+  if (isOutOfBounds(cell.row, cell.col)) {
+    return cells;
+  }
+
+  if (cells[cell.row][cell.col].cleared || cells[cell.row][cell.col].mined) {
+    return cells;
+  }
+
+  const adjacentMineCount = getAdjacentCellsMineCount(cells, cell.row, cell.col);
+
+  let newCells = cells.map((row) => {
+    return row.map((item) => {
+      if (!item.cleared && !item.mined) {
+        if (item.key === key) {
+          return { ...item, cleared: true, adjacentMineCount };
+        }
+      }
+      return item;
+    });
+  });
+
+  if (adjacentMineCount) {
+    return newCells;
+  }
+
+  const adjacents = getAdjacentCells(cells, cell.row, cell.col);
+  adjacents.forEach(c => {
+    newCells = clearCell(newCells, c.key);
+  });
+
+  return newCells;
+};
+
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case PROBE:
-    return { cells: clearCells(state.cells, action.payload) };
+    return { cells: clearCell(state.cells, action.payload) };
 
   default:
     return state;
