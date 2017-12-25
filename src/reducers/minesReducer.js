@@ -32,30 +32,6 @@ const getInitialState = () => {
   return { cells };
 };
 
-const isCellOrNeighbour = (key, rowIndex, colIndex) => {
-  const selected = getIndexesFromKey(key);
-  if (rowIndex >= selected.row - 1 && rowIndex <= selected.row + 1) {
-    if (colIndex >= selected.col - 1 && colIndex <= selected.col + 1) {
-      return true;
-    }
-  }
-
-  return false;
-};
-
-const clearCells = (cells, key) => {
-  return cells.map((row, rowIndex) => {
-    return row.map((item, colIndex) => {
-      if (!item.cleared && !item.mined) {
-        if (isCellOrNeighbour(key, rowIndex, colIndex)) {
-          return { ...item, cleared: true };
-        }
-      }
-      return item;
-    });
-  });
-};
-
 const isOutOfBounds = (row, col) => {
   return row < 0 || row >= HEIGHT || col < 0 || col >= WIDTH;
 };
@@ -136,4 +112,4 @@ const minesReducer = (state = getInitialState(), action) => {
 };
 
 export default minesReducer;
-export { clearCells };
+export { clearCell };
