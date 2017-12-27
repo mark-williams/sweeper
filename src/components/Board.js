@@ -5,22 +5,39 @@ import { probeCell } from '../actions';
 
 
 class Board extends React.Component {
-  renderItems = item => {
-    const className = item.cleared ? 'clear' : '';
+  renderItem = item => {
     return (
-      <td key={item.key} className={className}>
+      <td key={item.key} className={this.getClassName(item)}>
         <div onClick={() => this.props.onCellClick(item.key)}>
-          {item.adjacentMineCount ? item.adjacentMineCount :  <span>&nbsp;</span> }
-          {item.mined ? 'x' : <span>&nbsp;</span> }
+          {this.getCellContent(item)}
         </div>
       </td>
     );
   }
 
+  getClassName = item => {
+    if (item.cleared) {
+      return 'clear';
+    }
+    if (item.key === this.props.explodedMineKey) {
+      return 'exploded';
+    }
+
+    return '';
+  }
+
+  getCellContent = item => {
+    if (item.mined) {
+      return <span>X</span>;
+    }
+
+    return item.adjacentMineCount ? <span>{item.adjacentMineCount}</span> : <span>&nbsp;</span>;
+  }
+
   renderRow = (row, idx) => {
     return (
       <tr key={idx}>
-        {row.map(this.renderItems)}
+        {row.map(this.renderItem)}
       </tr>
     );
   }
@@ -40,12 +57,14 @@ class Board extends React.Component {
 
 Board.propTypes = {
   cells: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
-  onCellClick: PropTypes.func
+  onCellClick: PropTypes.func,
+  explodedMineKey: PropTypes.string
 };
 
 const mapStateToProps = state => {
   return {
-    cells: state.cells
+    cells: state.cells,
+    explodedMineKey: state.explodedMineKey
   };
 };
 

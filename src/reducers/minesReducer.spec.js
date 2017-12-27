@@ -36,6 +36,16 @@ describe('minesReducer', () => {
       expect(result).toBeDefined();
       expect(result.cells && result.cells.length > 0).toBe(true);
     });
+
+    it('if probed cell has mine should set this as part of state', () => {
+      const state = {
+        cells: [
+          [{ key: '0:0' }, { key: '0:1' }, { key: '0:2', mined: true }]
+        ]
+      };
+      const result = minesReducer(state, { type: 'PROBE', payload: '0:2' });
+      expect(result.explodedMineKey).toEqual('0:2');
+    });
   });
 
   describe('helpers', () => {

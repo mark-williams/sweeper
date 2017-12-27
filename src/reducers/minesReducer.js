@@ -101,9 +101,19 @@ const clearCell = (cells, key) => {
   return newCells;
 };
 
+const getCell = (cells, key) => {
+  const cellIndexes = getIndexesFromKey(key);
+  return cells[cellIndexes.row][cellIndexes.col];
+};
+
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case PROBE:
+    const currentCell = getCell(state.cells, action.payload);
+    if (currentCell.mined) {
+      return { ...state, explodedMineKey: action.payload };
+    }
+
     return { cells: clearCell(state.cells, action.payload) };
 
   default:

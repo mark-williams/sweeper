@@ -56,3 +56,8 @@ td {
 td.clear {
   background-color: hsl(0, 0%, 95%);
 }
+
+.exploded {
+  background-color: hsl(0, 70%, 46%);
+  color: hsl(30, 80%, 70%);
+}
