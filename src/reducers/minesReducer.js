@@ -1,7 +1,9 @@
+import _ from 'lodash';
 import { PROBE } from '../actions';
 
 const WIDTH = 10;
 const HEIGHT = 10;
+const MINES_PERCENTAGE = 10;
 
 const getKey = (row, col) => (`${row}:${col}`);
 const getIndexesFromKey = (key) => {
@@ -11,6 +13,20 @@ const getIndexesFromKey = (key) => {
 
 const hasMine = () => {
   return (Math.random() * 10) < 1;
+};
+
+const layMines = (cells) => {
+  const flattenedCells = _.flatten(cells);
+  const numberofCells = flattenedCells.length;
+  const laidMines = {};
+  while (Object.keys(laidMines).length < (numberofCells / MINES_PERCENTAGE)) {
+    const index = Math.floor(Math.random() * numberofCells);
+    if (laidMines.hasOwnProperty(flattenedCells[index].key) === false) {
+      laidMines[flattenedCells[index].key] = true;
+    }
+  }
+
+  return laidMines;
 };
 
 const getInitialState = () => {
@@ -29,7 +45,7 @@ const getInitialState = () => {
     cells.push(row);
   }
 
-  return { cells };
+  return { cells, mines: layMines(), explodedMineKey: null };
 };
 
 const isOutOfBounds = (row, col) => {
@@ -122,4 +138,6 @@ const minesReducer = (state = getInitialState(), action) => {
 };
 
 export default minesReducer;
-export { clearCell };
+
+// Exported for testing
+export { clearCell, layMines };
