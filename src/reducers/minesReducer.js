@@ -15,7 +15,7 @@ const hasMine = () => {
   return (Math.random() * 10) < 1;
 };
 
-const layMines = (cells) => {
+const getMines = (cells) => {
   const flattenedCells = _.flatten(cells);
   const numberofCells = flattenedCells.length;
   const laidMines = {};
@@ -45,7 +45,12 @@ const getInitialState = () => {
     cells.push(row);
   }
 
-  return { cells, mines: layMines(), explodedMineKey: null };
+  const mines = getMines(cells);
+  _.flatten(cells).forEach(c => {
+    c.mined = !!mines[c.key];
+  });
+
+  return { cells, explodedMineKey: null };
 };
 
 const isOutOfBounds = (row, col) => {
@@ -140,4 +145,4 @@ const minesReducer = (state = getInitialState(), action) => {
 export default minesReducer;
 
 // Exported for testing
-export { clearCell, layMines };
+export { clearCell, getMines };

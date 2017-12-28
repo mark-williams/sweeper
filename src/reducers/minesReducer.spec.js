@@ -1,4 +1,4 @@
-import minesReducer, { clearCell, layMines } from './minesReducer';
+import minesReducer, { clearCell, getMines } from './minesReducer';
 import _ from 'lodash';
 
 const testCells = [
@@ -55,7 +55,7 @@ describe('minesReducer', () => {
     });
 
     it('lay mines should return an object with keys for each mine', () => {
-      const mines = layMines(cells);
+      const mines = getMines(cells);
       expect(Object.keys(mines).length > 0).toBe(true);
     });
 
