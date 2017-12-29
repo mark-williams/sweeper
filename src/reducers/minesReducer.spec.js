@@ -54,8 +54,8 @@ describe('minesReducer', () => {
       let result;
       beforeEach(() => {
         // Clear some of the cells
-        const midGameCells = _.flatten(testCells)
-          .map((cell, index) => (index % 2 ? cell : { ...cell, cleared: true }));
+        _.flatten(testCells)
+          .forEach((cell, index) => (index % 2 ? cell : { ...cell, cleared: true }));
         const state = { cells: testCells };
         result = minesReducer(state, newGame());
       });

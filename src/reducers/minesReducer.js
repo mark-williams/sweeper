@@ -27,8 +27,11 @@ const getMines = (cells) => {
 
 const layMines = (cells) => {
   const mines = getMines(cells);
-  _.flatten(cells).forEach(c => {
-    c.mined = !!mines[c.key];
+ 
+  return cells.map(row => {
+    return row.map(item => {
+      return !!mines[item.key] ? { ...item, mined: true } : item;
+    });
   });
 };
 
@@ -48,9 +51,9 @@ const getInitialState = () => {
     cells.push(row);
   }
 
-  layMines(cells);
+  const newCells = layMines(cells);
 
-  return { cells, explodedMineKey: null };
+  return { cells: newCells, explodedMineKey: null };
 };
 
 const isOutOfBounds = (row, col) => {
@@ -131,9 +134,8 @@ const resetCells = (cells) => {
   const newCells = cells.map((row) => {
     return row.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
   });
-  layMines(newCells);
-
-  return newCells;
+  
+  return layMines(newCells);
 };
 
 const minesReducer = (state = getInitialState(), action) => {
