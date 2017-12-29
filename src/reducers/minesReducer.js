@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { PROBE } from '../actions';
+import { NEW_GAME, PROBE } from '../actions';
 
 const WIDTH = 10;
 const HEIGHT = 10;
@@ -9,10 +9,6 @@ const getKey = (row, col) => (`${row}:${col}`);
 const getIndexesFromKey = (key) => {
   const indexes = key.split(':');
   return { row: parseInt(indexes[0], 10), col: parseInt(indexes[1], 10) };
-};
-
-const hasMine = () => {
-  return (Math.random() * 10) < 1;
 };
 
 const getMines = (cells) => {
@@ -29,6 +25,13 @@ const getMines = (cells) => {
   return laidMines;
 };
 
+const layMines = (cells) => {
+  const mines = getMines(cells);
+  _.flatten(cells).forEach(c => {
+    c.mined = !!mines[c.key];
+  });
+};
+
 const getInitialState = () => {
   const cells = [];
   for (let rowIndex = 0; rowIndex < HEIGHT; rowIndex++) {
@@ -38,17 +41,14 @@ const getInitialState = () => {
         key: getKey(rowIndex, colIndex),
         cleared: false,
         adjacentMineCount: 0,
-        mined: hasMine()
+        mined: false
       };
       row.push(item);
     }
     cells.push(row);
   }
 
-  const mines = getMines(cells);
-  _.flatten(cells).forEach(c => {
-    c.mined = !!mines[c.key];
-  });
+  layMines(cells);
 
   return { cells, explodedMineKey: null };
 };
@@ -127,15 +127,25 @@ const getCell = (cells, key) => {
   return cells[cellIndexes.row][cellIndexes.col];
 };
 
+const resetCells = (cells) => {
+  const newCells = cells.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
+  layMines(newCells);
+
+  return newCells;
+};
+
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
+  case NEW_GAME:
+    return { ...state, cells: resetCells(state.cells) };
+
   case PROBE:
     const currentCell = getCell(state.cells, action.payload);
     if (currentCell.mined) {
       return { ...state, explodedMineKey: action.payload };
     }
 
-    return { cells: clearCell(state.cells, action.payload) };
+    return { ...state, cells: clearCell(state.cells, action.payload) };
 
   default:
     return state;
@@ -146,3 +156,5 @@ export default minesReducer;
 
 // Exported for testing
 export { clearCell, getMines };
+
+

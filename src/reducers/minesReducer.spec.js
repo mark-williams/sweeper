@@ -1,5 +1,6 @@
 import minesReducer, { clearCell, getMines } from './minesReducer';
 import _ from 'lodash';
+import { newGame } from '../actions';
 
 const testCells = [
   [
@@ -37,14 +38,35 @@ describe('minesReducer', () => {
       expect(result.cells && result.cells.length > 0).toBe(true);
     });
 
-    it('if probed cell has mine should set this as part of state', () => {
-      const state = {
-        cells: [
-          [{ key: '0:0' }, { key: '0:1' }, { key: '0:2', mined: true }]
-        ]
-      };
-      const result = minesReducer(state, { type: 'PROBE', payload: '0:2' });
-      expect(result.explodedMineKey).toEqual('0:2');
+    describe('probe action', () => {
+      it('if probed cell has mine should set this as part of state', () => {
+        const state = {
+          cells: [
+            [{ key: '0:0' }, { key: '0:1' }, { key: '0:2', mined: true }]
+          ]
+        };
+        const result = minesReducer(state, { type: 'PROBE', payload: '0:2' });
+        expect(result.explodedMineKey).toEqual('0:2');
+      });
+    });
+
+    describe('new game action', () => {
+      let result;
+      beforeEach(() => {
+        // Clear some of the cells
+        const midGameCells = _.flatten(testCells)
+          .map((cell, index) => (index % 2 ? cell : { ...cell, cleared: true }));
+        const state = { cells: midGameCells };
+        result = minesReducer(state, newGame());
+      });
+
+      it('should reset all cells', () => {
+        expect(result.cells.some(c => c.cleared)).toBe(false);
+      });
+
+      it('should lay some mines', () => {
+        expect(result.cells.some(c => c.mined)).toBe(true);
+      });
     });
   });
 
