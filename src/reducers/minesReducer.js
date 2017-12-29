@@ -27,7 +27,7 @@ const getMines = (cells) => {
 
 const layMines = (cells) => {
   const mines = getMines(cells);
- 
+
   return cells.map(row => {
     return row.map(item => {
       return !!mines[item.key] ? { ...item, mined: true } : item;
@@ -134,7 +134,7 @@ const resetCells = (cells) => {
   const newCells = cells.map((row) => {
     return row.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
   });
-  
+
   return layMines(newCells);
 };
 
