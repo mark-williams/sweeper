@@ -3,7 +3,7 @@ import { NEW_GAME, PROBE } from '../actions';
 
 const WIDTH = 10;
 const HEIGHT = 10;
-const MINES_PERCENTAGE = 10;
+const MINES_PERCENTAGE = 20;
 
 const getKey = (row, col) => (`${row}:${col}`);
 const getIndexesFromKey = (key) => {
@@ -14,15 +14,15 @@ const getIndexesFromKey = (key) => {
 const getMines = (cells) => {
   const flattenedCells = _.flatten(cells);
   const numberofCells = flattenedCells.length;
-  const laidMines = {};
-  while (Object.keys(laidMines).length < (numberofCells / MINES_PERCENTAGE)) {
+  const mines = {};
+  while (Object.keys(mines).length < (MINES_PERCENTAGE * numberofCells / 100)) {
     const index = Math.floor(Math.random() * numberofCells);
-    if (laidMines.hasOwnProperty(flattenedCells[index].key) === false) {
-      laidMines[flattenedCells[index].key] = true;
+    if (mines.hasOwnProperty(flattenedCells[index].key) === false) {
+      mines[flattenedCells[index].key] = true;
     }
   }
 
-  return laidMines;
+  return mines;
 };
 
 const layMines = (cells) => {
@@ -128,7 +128,9 @@ const getCell = (cells, key) => {
 };
 
 const resetCells = (cells) => {
-  const newCells = cells.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
+  const newCells = cells.map((row) => {
+    return row.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
+  });
   layMines(newCells);
 
   return newCells;

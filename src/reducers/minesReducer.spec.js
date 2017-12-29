@@ -56,16 +56,16 @@ describe('minesReducer', () => {
         // Clear some of the cells
         const midGameCells = _.flatten(testCells)
           .map((cell, index) => (index % 2 ? cell : { ...cell, cleared: true }));
-        const state = { cells: midGameCells };
+        const state = { cells: testCells };
         result = minesReducer(state, newGame());
       });
 
       it('should reset all cells', () => {
-        expect(result.cells.some(c => c.cleared)).toBe(false);
+        expect(_.flatten(result.cells).some(c => c.cleared)).toBe(false);
       });
 
       it('should lay some mines', () => {
-        expect(result.cells.some(c => c.mined)).toBe(true);
+        expect(_.flatten(result.cells).some(c => c.mined)).toBe(true);
       });
     });
   });
