@@ -56,7 +56,7 @@ describe('minesReducer', () => {
         // Clear some of the cells
         _.flatten(testCells)
           .forEach((cell, index) => (index % 2 ? cell : { ...cell, cleared: true }));
-        const state = { cells: testCells };
+        const state = { cells: testCells, explodedMineKey: 'BANG' };
         result = minesReducer(state, newGame());
       });
 
@@ -66,6 +66,10 @@ describe('minesReducer', () => {
 
       it('should lay some mines', () => {
         expect(_.flatten(result.cells).some(c => c.mined)).toBe(true);
+      });
+
+      it('should clear exploded mine key', () => {
+        expect(result.explodedMineKey).toBeNull();
       });
     });
   });

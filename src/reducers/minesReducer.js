@@ -141,7 +141,7 @@ const resetCells = (cells) => {
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case NEW_GAME:
-    return { ...state, cells: resetCells(state.cells) };
+    return { ...state, cells: resetCells(state.cells), explodedMineKey: null };
 
   case PROBE:
     const currentCell = getCell(state.cells, action.payload);
