@@ -1,4 +1,4 @@
-import minesReducer, { clearCell, getMines } from './minesReducer';
+import minesReducer, { clearCell, getMines, isGameWon } from './minesReducer';
 import _ from 'lodash';
 import { newGame } from '../actions';
 
@@ -118,6 +118,42 @@ describe('minesReducer', () => {
       const allCells = _.flatten(results);
       const unCleared = allCells.filter(c => c.cleared === false);
       expect(unCleared.length).toBe(2);
+    });
+
+    describe('game won', () => {
+      it('should detect game won', () => {
+        const winningCells = [
+          [
+            { cleared: true, mined: false },
+            { cleared: true, mined: false },
+            { cleared: true, mined: false }
+          ],
+          [
+            { cleared: true, mined: false },
+            { cleared: false, mined: true },
+            { cleared: false, mined: true }
+          ]
+        ];
+  
+        expect(isGameWon(winningCells)).toBe(true);
+      });
+
+      it('should not flag game as won if any unmined cells are uncleared', () => {
+        const unfinishedCells = [
+          [
+            { cleared: true, mined: false },
+            { cleared: false, mined: false },
+            { cleared: true, mined: false }
+          ],
+          [
+            { cleared: false, mined: false },
+            { cleared: false, mined: true },
+            { cleared: false, mined: true }
+          ]
+        ];
+
+        expect(isGameWon(unfinishedCells)).toBe(false);
+      });
     });
   });
 });

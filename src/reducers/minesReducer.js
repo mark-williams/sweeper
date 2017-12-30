@@ -138,6 +138,14 @@ const resetCells = (cells) => {
   return layMines(newCells);
 };
 
+const isGameWon = (cells) => {
+  const uncleared = _.flatten(cells).some(c => {
+    return !c.mined && !c.cleared;
+  });
+
+  return !uncleared;
+};
+
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case NEW_GAME:
@@ -149,7 +157,8 @@ const minesReducer = (state = getInitialState(), action) => {
       return { ...state, explodedMineKey: action.payload };
     }
 
-    return { ...state, cells: clearCell(state.cells, action.payload) };
+    const updatedCells = clearCell(state.cells, action.payload);
+    return { ...state, cells: updatedCells, gameWon: isGameWon(updatedCells) };
 
   default:
     return state;
@@ -159,6 +168,6 @@ const minesReducer = (state = getInitialState(), action) => {
 export default minesReducer;
 
 // Exported for testing
-export { clearCell, getMines };
+export { clearCell, getMines, isGameWon };
 
 
