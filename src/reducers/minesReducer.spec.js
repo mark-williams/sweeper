@@ -134,7 +134,7 @@ describe('minesReducer', () => {
             { cleared: false, mined: true }
           ]
         ];
-  
+
         expect(isGameWon(winningCells)).toBe(true);
       });
 
