@@ -53,7 +53,7 @@ const getInitialState = () => {
 
   const newCells = layMines(cells);
 
-  return { cells: newCells, explodedMineKey: null };
+  return { cells: newCells, explodedMineKey: null, gameWon: false };
 };
 
 const isOutOfBounds = (row, col) => {
@@ -149,7 +149,7 @@ const isGameWon = (cells) => {
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case NEW_GAME:
-    return { ...state, cells: resetCells(state.cells), explodedMineKey: null };
+    return { ...state, cells: resetCells(state.cells), explodedMineKey: null, gameWon: false };
 
   case PROBE:
     const currentCell = getCell(state.cells, action.payload);

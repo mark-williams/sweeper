@@ -10,12 +10,21 @@ import '../style/App.css';
 const gameOverToastOptions = {
   type: toast.TYPE.WARNING
 };
+const gameWonToastOptions = {
+  type: toast.TYPE.SUCCESS
+};
+
 
 class App extends Component {
   render() {
     if (this.props.explodedMineKey) {
       toast('Game over! You lost.', gameOverToastOptions);
     }
+
+    if (this.props.gameWon) {
+      toast('Congratulations! You won.', gameWonToastOptions);
+    }
+
     return (
       <div className="App">
         <ToastContainer />
@@ -34,13 +43,15 @@ class App extends Component {
 App.propTypes = {
   cells: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
   explodedMineKey: PropTypes.string,
+  gameWon: PropTypes.bool,
   onNewGame: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
   return {
     cells: state.cells,
-    explodedMineKey: state.explodedMineKey
+    explodedMineKey: state.explodedMineKey,
+    gameWon: state.gameWon
   };
 };
 
