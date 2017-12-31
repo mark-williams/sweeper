@@ -27,14 +27,23 @@
 }
 
 .mainContainer {
-  margin: 20px;
+  margin: 0;
+  padding: 1rem;
 }
 
 .board { 
+  margin: 1rem 0;
+}
+
+button {
+  padding: .3rem .5rem;
+  color: hsl(0, 0%, 90%);
+  background-color: hsl(100, 60%, 40%);
+  border-width: 0;
 }
 
 table {
-  margin: 40px auto;
+  margin: 0 auto;
   border-collapse: collapse;
 }
 
