@@ -152,6 +152,10 @@ const minesReducer = (state = getInitialState(), action) => {
     return { ...state, cells: resetCells(state.cells), explodedMineKey: null, gameWon: false };
 
   case PROBE:
+    if (isGameWon(state.cells) || state.explodedMineKey) {
+      return state;
+    }
+
     const currentCell = getCell(state.cells, action.payload);
     if (currentCell.mined) {
       return { ...state, explodedMineKey: action.payload };
