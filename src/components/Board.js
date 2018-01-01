@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { probeCell } from '../actions';
 
+const SHOW_MINES = false;
 
 class Board extends React.Component {
   renderItem = item => {
@@ -28,7 +29,7 @@ class Board extends React.Component {
 
   getCellContent = item => {
     if (item.mined) {
-      return <span>X</span>;
+      return item.key === this.props.explodedMineKey || SHOW_MINES ? <span>X</span> : <span>&nbsp;</span>;
     }
 
     return item.adjacentMineCount ? <span>{item.adjacentMineCount}</span> : <span>&nbsp;</span>;

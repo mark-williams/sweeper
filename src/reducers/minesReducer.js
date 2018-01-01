@@ -3,7 +3,7 @@ import { NEW_GAME, PROBE } from '../actions';
 
 const WIDTH = 10;
 const HEIGHT = 10;
-const MINES_PERCENTAGE = 20;
+const MINES_PERCENTAGE = 10;
 
 const getKey = (row, col) => (`${row}:${col}`);
 const getIndexesFromKey = (key) => {
