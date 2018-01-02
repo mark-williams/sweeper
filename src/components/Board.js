@@ -1,7 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { probeCell } from '../actions';
 
 const SHOW_MINES = false;
 
@@ -62,17 +60,4 @@ Board.propTypes = {
   explodedMineKey: PropTypes.string
 };
 
-const mapStateToProps = state => {
-  return {
-    cells: state.cells,
-    explodedMineKey: state.explodedMineKey
-  };
-};
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onCellClick: id => dispatch(probeCell(id))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Board);
+export default Board;
