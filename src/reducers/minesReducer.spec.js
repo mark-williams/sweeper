@@ -75,52 +75,54 @@ describe('minesReducer', () => {
   });
 
   describe('helpers', () => {
-    let cells;
-    beforeEach(() => {
-      cells = testCells;
+    describe('clearCell', () => {
+      let cells;
+      beforeEach(() => {
+        cells = testCells;
+      });
+
+      it('lay mines should return an object with keys for each mine', () => {
+        const mines = getMines(cells);
+        expect(Object.keys(mines).length > 0).toBe(true);
+      });
+
+      it('should clear cell', () => {
+        const results = clearCell(cells, '0:0');
+        expect(results[0][0].cleared).toBe(true);
+      });
+
+      it('should clear immediate neighbours', () => {
+        const results = clearCell(cells, '1:1');
+        expect(results[0][0].cleared).toBe(true);
+        expect(results[0][1].cleared).toBe(true);
+        expect(results[0][2].cleared).toBe(true);
+        expect(results[1][0].cleared).toBe(true);
+        expect(results[1][1].cleared).toBe(true);
+        expect(results[1][2].cleared).toBe(true);
+        expect(results[2][0].cleared).toBe(true);
+        expect(results[2][1].cleared).toBe(true);
+        expect(results[2][2].cleared).toBe(true);
+      });
+
+      it('should clear all unmined neighbours', () => {
+        const results = clearCell(cells, '1:1');
+
+        const allCells = _.flatten(results);
+        const unCleared = allCells.filter(c => c.cleared === false);
+        expect(unCleared.length).toBe(0);
+      });
+
+      it('should not clear all mined neighbours', () => {
+        cells[0][0].mined = cells[1][0].mined = true;
+        const results = clearCell(cells, '2:2');
+
+        const allCells = _.flatten(results);
+        const unCleared = allCells.filter(c => c.cleared === false);
+        expect(unCleared.length).toBe(2);
+      });
     });
 
-    it('lay mines should return an object with keys for each mine', () => {
-      const mines = getMines(cells);
-      expect(Object.keys(mines).length > 0).toBe(true);
-    });
-
-    it('should clear cell', () => {
-      const results = clearCell(cells, '0:0');
-      expect(results[0][0].cleared).toBe(true);
-    });
-
-    it('should clear immediate neighbours', () => {
-      const results = clearCell(cells, '1:1');
-      expect(results[0][0].cleared).toBe(true);
-      expect(results[0][1].cleared).toBe(true);
-      expect(results[0][2].cleared).toBe(true);
-      expect(results[1][0].cleared).toBe(true);
-      expect(results[1][1].cleared).toBe(true);
-      expect(results[1][2].cleared).toBe(true);
-      expect(results[2][0].cleared).toBe(true);
-      expect(results[2][1].cleared).toBe(true);
-      expect(results[2][2].cleared).toBe(true);
-    });
-
-    it('should clear all unmined neighbours', () => {
-      const results = clearCell(cells, '1:1');
-
-      const allCells = _.flatten(results);
-      const unCleared = allCells.filter(c => c.cleared === false);
-      expect(unCleared.length).toBe(0);
-    });
-
-    it('should not clear all mined neighbours', () => {
-      cells[0][0].mined = cells[1][0].mined = true;
-      const results = clearCell(cells, '2:2');
-
-      const allCells = _.flatten(results);
-      const unCleared = allCells.filter(c => c.cleared === false);
-      expect(unCleared.length).toBe(2);
-    });
-
-    describe('game won', () => {
+    describe('isGameWon', () => {
       it('should detect game won', () => {
         const winningCells = [
           [
