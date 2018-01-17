@@ -52,8 +52,9 @@ const getInitialState = () => {
   }
 
   const newCells = layMines(cells);
+  const mines = getMines(cells);
 
-  return { cells: newCells, explodedMineKey: null, gameWon: false };
+  return { cells: newCells, mines: mines, explodedMineKey: null, gameWon: false };
 };
 
 const isOutOfBounds = (row, col) => {
