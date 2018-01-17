@@ -64,19 +64,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-
-// const mapStateToProps = state => {
-//   return {
-//     cells: state.cells,
-//     explodedMineKey: state.explodedMineKey
-//   };
-// };
-
-// const mapDispatchToProps = dispatch => {
-//   return {
-//     onCellClick: id => dispatch(probeCell(id))
-//   };
-// };
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Board);

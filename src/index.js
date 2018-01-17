@@ -7,7 +7,7 @@ import './style/index.css';
 import App from './components//App';
 import registerServiceWorker from './registerServiceWorker';
 
-const store = createStore(minesReducer);
+const store = createStore(minesReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 ReactDOM.render(
   <Provider store={store}>
