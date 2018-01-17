@@ -25,9 +25,7 @@ const getMines = (cells) => {
   return mines;
 };
 
-const layMines = (cells) => {
-  const mines = getMines(cells);
-
+const layMines = (cells, mines) => {
   return cells.map(row => {
     return row.map(item => {
       return !!mines[item.key] ? { ...item, mined: true } : item;
@@ -51,8 +49,8 @@ const getInitialState = () => {
     cells.push(row);
   }
 
-  const newCells = layMines(cells);
   const mines = getMines(cells);
+  const newCells = layMines(cells, mines);
 
   return { cells: newCells, mines: mines, explodedMineKey: null, gameWon: false };
 };
@@ -60,6 +58,8 @@ const getInitialState = () => {
 const isOutOfBounds = (row, col) => {
   return row < 0 || row >= HEIGHT || col < 0 || col >= WIDTH;
 };
+
+const isMined = (state, cell) => (state.mines.hasOwnProperty(cell));
 
 const getAdjacentCells = (cells, row, col) => {
   const adjacents = [];
@@ -126,11 +126,6 @@ const clearCell = (cells, key) => {
   return newCells;
 };
 
-const getCell = (cells, key) => {
-  const cellIndexes = getIndexesFromKey(key);
-  return cells[cellIndexes.row][cellIndexes.col];
-};
-
 const resetCells = (cells) => {
   const newCells = cells.map((row) => {
     return row.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
@@ -157,8 +152,8 @@ const minesReducer = (state = getInitialState(), action) => {
       return state;
     }
 
-    const currentCell = getCell(state.cells, action.payload);
-    if (currentCell.mined) {
+    // const currentCell = getCell(state.cells, action.payload);
+    if (isMined(state, action.payload)) {
       return { ...state, explodedMineKey: action.payload };
     }
 
@@ -172,7 +167,6 @@ const minesReducer = (state = getInitialState(), action) => {
 
 export default minesReducer;
 
-// Exported for testing
-export { clearCell, getMines, isGameWon };
+export { isMined, clearCell, getMines, isGameWon };
 
 
