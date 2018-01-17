@@ -126,12 +126,12 @@ const clearCell = (cells, key) => {
   return newCells;
 };
 
-const resetCells = (cells) => {
-  const newCells = cells.map((row) => {
+const resetCells = (state) => {
+  const newCells = state.cells.map((row) => {
     return row.map(c => ({ ...c, cleared: false, mined: false, adjacentMineCount: 0 }));
   });
 
-  return layMines(newCells);
+  return layMines(newCells, state.mines);
 };
 
 const isGameWon = (cells) => {
@@ -145,7 +145,8 @@ const isGameWon = (cells) => {
 const minesReducer = (state = getInitialState(), action) => {
   switch (action.type) {
   case NEW_GAME:
-    return { ...state, cells: resetCells(state.cells), explodedMineKey: null, gameWon: false };
+    const mines = getMines(state.cells);
+    return { ...state, cells: resetCells(state), mines: mines, explodedMineKey: null, gameWon: false };
 
   case PROBE:
     if (isGameWon(state.cells) || state.explodedMineKey) {
