@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { ToastContainer, toast } from 'react-toastify';
-import { newGame, probeCell } from '../actions';
+import * as actions from '../actions';
 import Board from './Board';
 import logo from '../logo.svg';
 import '../style/App.css';
@@ -32,8 +32,8 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
         </header>
         <div className="mainContainer">
-          <button onClick={this.props.onNewGame}>Start new game</button>
-          <Board cells={this.props.cells} onCellClick={this.props.onCellClick} explodedMineKey={this.props.explodedMineKey} />
+          <button onClick={this.props.newGame}>Start new game</button>
+          <Board cells={this.props.cells} onCellClick={this.props.probeCell} explodedMineKey={this.props.explodedMineKey} />
         </div>
       </div>
     );
@@ -44,8 +44,8 @@ App.propTypes = {
   cells: PropTypes.arrayOf(PropTypes.arrayOf(PropTypes.object)),
   explodedMineKey: PropTypes.string,
   gameWon: PropTypes.bool,
-  onNewGame: PropTypes.func,
-  onCellClick: PropTypes.func
+  newGame: PropTypes.func,
+  probeCell: PropTypes.func
 };
 
 const mapStateToProps = (state) => {
@@ -56,11 +56,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    onNewGame: () => dispatch(newGame()),
-    onCellClick: id => dispatch(probeCell(id))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps, actions)(App);
